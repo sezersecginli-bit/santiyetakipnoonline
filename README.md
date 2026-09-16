@@ -78,6 +78,15 @@ ekleyip DNS kayıtlarını Vercel'in gösterdiği şekilde güncellemeniz yeterl
 
 ## Notlar
 
+- **Şifresiz mod (varsayılan, geçici)**: Sistem şu an gerçek Supabase Authentication yerine, ekip
+  üyesinin 5 sabit isimden birini seçtiği basit bir modelle çalışıyor (`lib/identity.js`). Seçim
+  tarayıcıda hatırlanır, şifre kontrolü yoktur. Bunu etkinleştirmek için `supabase/enable-anon-access.sql`
+  dosyasını SQL Editor'de çalıştırmanız gerekir. **Bu, sitenizin adresini bilen herkesin veriye
+  erişebileceği anlamına gelir** — sadece güvendiğiniz kapalı bir ekip için ve geçici olarak kullanın.
+  İleride gerçek şifreli girişe dönmek isterseniz `components/LoginScreen.js` ve `app/page.js`
+  içindeki eski Supabase Auth kodu `lib/api.js`'de hâlâ duruyor (signIn/signOut/getSession); bu
+  fonksiyonları tekrar bağlamanız ve `supabase/schema.sql`'deki orijinal "authenticated" politikalarını
+  geri yüklemeniz yeterli.
 - **Realtime**: Bir kullanıcı bir teklifi onayladığında veya yeni bir günlük rapor girdiğinde,
   diğer açık oturumlar birkaç saniye içinde otomatik güncellenir (Supabase Realtime kullanılıyor).
 - **Dosya yükleme**: Evraklar ve Fotoğraflar modüllerinde artık gerçek dosya/fotoğraf yükleme
