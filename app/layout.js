@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Şantiye Yönetim Sistemi | 60 Dairelik Konut Projesi",
+  title: "Şantiye Yönetim Sistemi",
   description: "Şantiye ve proje yönetim sistemi",
 };
 

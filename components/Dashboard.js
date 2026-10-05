@@ -78,7 +78,10 @@ export default function Dashboard({ data, setPage }) {
         <SectionCard title="BUGÜN" className="lg:col-span-1">
           <div className="space-y-4 text-sm">
             <div>
-              <div className="text-xs font-medium text-slate-400 mb-1.5">YAPILACAKLAR ({myTasksToday.length})</div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-medium text-slate-400">YAPILACAKLAR ({myTasksToday.length})</span>
+                <button onClick={() => setPage("gorevler")} className="text-[11px] text-orange-600 font-medium hover:underline">Tümünü gör</button>
+              </div>
               {myTasksToday.length ? myTasksToday.map((t) => (
                 <div key={t.id} className="flex items-center justify-between py-1.5 border-b border-slate-50 last:border-0">
                   <span className="text-slate-700 truncate pr-2">{t.title}</span>

@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
-import { HardHat, Loader2 } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 import { signIn } from "@/lib/api";
+import OrgIcon from "./OrgIcon";
 
-export default function LoginScreen({ onSuccess }) {
+export default function LoginScreen({ org, onBack, onSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -15,9 +16,9 @@ export default function LoginScreen({ onSuccess }) {
     setLoading(true);
     try {
       await signIn(email.trim(), password);
-      onSuccess();
+      onSuccess?.();
     } catch (err) {
-      setError("E-posta veya şifre hatalı. Supabase Authentication panelinde kullanıcının tanımlı olduğundan emin olun.");
+      setError("E-posta veya şifre hatalı. Supabase Authentication panelinde bu e-posta ile bir kullanıcı tanımlı olduğundan emin olun.");
     } finally {
       setLoading(false);
     }
@@ -26,15 +27,14 @@ export default function LoginScreen({ onSuccess }) {
   return (
     <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <div className="flex items-center gap-2.5 justify-center mb-8">
-          <div className="w-9 h-9 rounded bg-orange-500 flex items-center justify-center">
-            <HardHat size={18} className="text-slate-950" />
-          </div>
-          <span className="text-slate-100 font-semibold text-lg tracking-tight">Şantiye Yönetim Sistemi</span>
+        <div className="flex justify-center mb-8">
+          <span className="block shadow-xl shadow-black/50" style={{ borderRadius: 21 }}>
+            <OrgIcon org={org} size={96} />
+          </span>
         </div>
         <div className="bg-slate-900 border border-slate-800 rounded-xl p-6">
-          <p className="text-slate-400 text-sm mb-1">60 Dairelik Konut Projesi</p>
-          <h1 className="text-slate-100 text-xl font-semibold mb-6">Hesabınızla giriş yapın</h1>
+          <h1 className="text-slate-100 text-xl font-semibold mb-1">Giriş Yap</h1>
+          <p className="text-slate-500 text-sm mb-6">{org?.name} hesabınızla devam edin</p>
           <form onSubmit={submit} className="space-y-3">
             <label className="block">
               <span className="text-xs text-slate-400">E-posta</span>
@@ -42,6 +42,7 @@ export default function LoginScreen({ onSuccess }) {
                 type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-500"
                 placeholder="ornek@sirket.com"
+                autoComplete="username"
               />
             </label>
             <label className="block">
@@ -50,6 +51,7 @@ export default function LoginScreen({ onSuccess }) {
                 type="password" required value={password} onChange={(e) => setPassword(e.target.value)}
                 className="mt-1 w-full bg-slate-800 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-orange-500/40 focus:border-orange-500"
                 placeholder="••••••••"
+                autoComplete="current-password"
               />
             </label>
             {error && <p className="text-xs text-red-400">{error}</p>}
@@ -62,9 +64,9 @@ export default function LoginScreen({ onSuccess }) {
             </button>
           </form>
         </div>
-        <p className="text-center text-slate-600 text-xs mt-5">
-          Hesabınız yok mu? Yöneticinizden Supabase Authentication panelinden sizin için bir kullanıcı oluşturmasını isteyin.
-        </p>
+        <button onClick={onBack} className="mt-5 mx-auto flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-300 transition-colors">
+          <ArrowLeft size={13} /> Organizasyon seçimine dön
+        </button>
       </div>
     </div>
   );

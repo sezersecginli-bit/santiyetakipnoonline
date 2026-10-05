@@ -1,12 +1,14 @@
 "use client";
-import { Search, Bell, LogOut, Menu } from "lucide-react";
+import { Search, LogOut, Menu } from "lucide-react";
+import ProjectSwitcher from "./ProjectSwitcher";
+import NotificationBell from "./NotificationBell";
 
 const ROLE_COLORS = {
   "Yönetici": "bg-orange-600", "Proje Mimarı": "bg-blue-600", "Şantiye Sorumlusu": "bg-emerald-600",
   "Satın Alma": "bg-purple-600", "Teknik Ofis": "bg-slate-600",
 };
 
-export default function TopBar({ profile, onLogout, onMenuToggle, alertCount, search, setSearch, projectName }) {
+export default function TopBar({ profile, onLogout, onMenuToggle, alerts, onNavigate, search, setSearch, orgId, projects, currentProjectId, onSwitchProject, onProjectCreated, onProjectDeleted }) {
   const initials = (profile?.full_name || "?").split(" ").map((s) => s[0]).slice(0, 2).join("").toUpperCase();
   const color = ROLE_COLORS[profile?.role] || "bg-slate-600";
 
@@ -15,7 +17,7 @@ export default function TopBar({ profile, onLogout, onMenuToggle, alertCount, se
       <button onClick={onMenuToggle} className="text-slate-500 hover:text-slate-800 md:hidden">
         <Menu size={20} />
       </button>
-      <div className="hidden md:block text-sm font-medium text-slate-800 truncate max-w-[220px]">{projectName}</div>
+      <ProjectSwitcher orgId={orgId} projects={projects} currentProjectId={currentProjectId} onSwitch={onSwitchProject} onCreated={onProjectCreated} onDeleted={onProjectDeleted} />
       <div className="flex-1 flex items-center max-w-md ml-2">
         <div className="relative w-full">
           <Search size={15} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -27,14 +29,7 @@ export default function TopBar({ profile, onLogout, onMenuToggle, alertCount, se
           />
         </div>
       </div>
-      <button className="relative text-slate-500 hover:text-slate-800">
-        <Bell size={18} />
-        {alertCount > 0 && (
-          <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center">
-            {alertCount}
-          </span>
-        )}
-      </button>
+      <NotificationBell alerts={alerts} onNavigate={onNavigate} />
       <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
         <div className={`w-8 h-8 rounded-full ${color} flex items-center justify-center text-white text-xs font-semibold`}>
           {initials}
@@ -50,3 +45,4 @@ export default function TopBar({ profile, onLogout, onMenuToggle, alertCount, se
     </header>
   );
 }
+
